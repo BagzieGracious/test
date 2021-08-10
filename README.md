@@ -1,5 +1,16 @@
 # test
 This is just a challenge
+
+Use the following endpoints to perform the specified tasks 
+    
+    EndPoint                                           | Functionality
+    ------------------------                           | ----------------------
+    Get /users/                                        | Fetch all users
+    Post /users/                                       | Add all users
+    Post /deposits/<user_id>                           | Deposit Amount
+    Post /withdraws/<user_id>                          | withdraw Amount
+    Post /transactions/<user_id>                       | Transact Amount
+    
 # Installation
 
 Create a new directory and initialize git in it. Clone this repository by running
