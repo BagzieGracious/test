@@ -23,7 +23,7 @@ $ virtualenv venv
 ```
 Activate the virtual environment
 ```sh
-$ cd venv/scripts/activate
+$ source venv/bin/activate
 ```
 Install the dependencies in the requirements.txt file using pip
 ```sh

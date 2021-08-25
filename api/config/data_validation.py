@@ -58,7 +58,7 @@ class DataValidation:
         Method tests if the params are all integers
         """
         for key in data:
-            if not isinstance(data[key], int):
+            if not key == 'currency' and not (isinstance(data[key], int) or isinstance(data[key], float)):
                 return False
         return True
 
@@ -86,6 +86,15 @@ class DataValidation:
         """
         Method returns the validate transaction information
         """
+        if not DataValidation.validate_currency(data['currency']):
+            return jsonify({
+                "success":False,
+                "error": {
+                    "code": 400,
+                    "message": "Please use a valid currency."
+                }
+            }), 400
+
         if isinstance(DataValidation.check_empty_data(data, lst), bool):
             if DataValidation.check_for_integers(data):
                 return True
@@ -97,3 +106,14 @@ class DataValidation:
                 }
             }), 400
         return DataValidation.check_empty_data(data, lst)
+
+    @staticmethod
+    def validate_currency(currency):
+        """
+        Method that checks for valid currency
+        """
+        currencies = ['USD', 'Naira', 'Yen', 'Yuan']
+
+        if currency in currencies:
+            return True
+        return False

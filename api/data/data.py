@@ -33,3 +33,15 @@ class Data:
         Method that returns all available deposists
         """
         return []
+
+    @staticmethod
+    def currencies():
+        """
+        Method that returns all currencies
+        """
+        return {
+            'USD':  1,
+            'Naira': 411.57,
+            'Yen': 109.47,
+            'Yuan': 6.46
+        }

@@ -14,6 +14,7 @@ class DepositController(MethodView):
     Deposits controller that inherits the method view
     """
     deposits = Model(Data.deposits())
+    currencies = Data.currencies()
 
 
     @staticmethod
@@ -41,15 +42,20 @@ class DepositController(MethodView):
            return jsonify({"success": False, "message": "User not found"}), 404
 
         post_data = request.get_json()
-        post_values = DataValidation.validate_transactions(post_data, ['amount'])
+        post_values = DataValidation.validate_transactions(post_data, ['amount', 'currency'])
 
         if isinstance(post_values, bool):
             data_object = {
                 "deposit_id": len(DepositController.deposits.get_list()) + 1,
                 "user_id": user_id,
-                "amount": post_data['amount']
+                "amount": post_data['amount'],
+                "currency": post_data['currency'],
             }
             user_amount = user_response['payload'][0]['amount']
+
+            if post_data['currency'] != 'USD':
+                post_data['amount'] =  (post_data['amount'] / DepositController.currencies[post_data['currency']])
+
             UserController.users.update_item(user_id, 'user_id', 'amount', (post_data['amount'] + user_amount))
             return DepositController.deposits.create_item(data_object)
         return post_values

@@ -14,6 +14,7 @@ class WithdrawController(MethodView):
     Withdraw controller that inherits the method view
     """
     withdraws = Model(Data.withdraws())
+    currencies = Data.currencies()
 
 
     @staticmethod
@@ -41,15 +42,19 @@ class WithdrawController(MethodView):
            return jsonify({"success": False, "message": "User not found"}), 404
 
         post_data = request.get_json()
-        post_values = DataValidation.validate_transactions(post_data, ['amount'])
+        post_values = DataValidation.validate_transactions(post_data, ['amount', 'currency'])
 
         if isinstance(post_values, bool):
             data_object = {
                 "withdraw_id": len(WithdrawController.withdraws.get_list()) + 1,
                 "user_id": user_id,
-                "amount": post_data['amount']
+                "amount": post_data['amount'],
+                "currency": post_data['currency'],
             }
             user_amount = user_response['payload'][0]['amount']
+
+            if post_data['currency'] != 'USD':
+                post_data['amount'] =  (post_data['amount'] / WithdrawController.currencies[post_data['currency']])
 
             if user_amount < post_data['amount']:
                 return jsonify({"success": False, "message": "Insuffient balance"}), 404

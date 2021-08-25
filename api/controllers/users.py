@@ -39,7 +39,8 @@ class UserController(MethodView):
                 "username": post_data['username'],
                 "email": post_data['email'],
                 "password": post_data['password'],
-                "amount": 0.0
+                "amount": 0.0,
+                "currency": "USD"
             }
             return UserController.users.create_item(data_object)
         return post_values
